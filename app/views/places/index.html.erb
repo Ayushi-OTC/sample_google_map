@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+<h1>Places</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @places.each do |place| %>
+      <tr>
+        <td><%= place.name %></td>
+        <td><%= place.latitude %></td>
+        <td><%= place.longitude %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div style='width: 800px;'>
+  <div id="map" style='width: 1600px; height: 600px;'></div>
+</div>
+
+<script type="text/javascript">
+  handler = Gmaps.build('Google');
+  handler.buildMap({ 
+    provider: {
+      disableDefaultUI: true
+    }, 
+    internal: {
+      id: 'map'
+    }
+  }, function(){
+    markers = handler.addMarkers(<%=raw @places_default.to_json %>);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  });
+</script>
